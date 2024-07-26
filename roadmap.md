@@ -1,0 +1,5 @@
+- use Database
+- stack operation history
+-- revert last operation
+- more operations like modulo
+- front-end to add a visual representation of stacks
