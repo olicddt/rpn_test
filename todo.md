@@ -1,0 +1,5 @@
+- DB / Redis to persist data
+- unit tests on operations
+- endpoint tests
+- logs
+- helpers functions and consts in their own file
