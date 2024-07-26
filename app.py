@@ -8,12 +8,12 @@ swagger = Swagger(app, template= { "info": { "title": "RPN Stack API" } })
 
 stacks = {}
 
-OPERANDS = {
-    '+': 'add',
-    '-': 'subtract',
-    '*': 'multiply',
-    '/': 'divide',
-}
+OPERANDS = [
+  "ADD",
+  "SUBTRACT",
+  "MULTIPLY",
+  "DIVIDE",
+]
 
 def stackNotFound():
   abort(404, description="Stack not found")
@@ -32,7 +32,7 @@ def list_operands():
           items:
             type: string
     """
-    return jsonify(list(OPERANDS.keys()))
+    return jsonify(OPERANDS)
 
 @app.route("/rpn/stacks")
 def list_stacks():
@@ -202,6 +202,7 @@ def apply_operand_to_stack(op, id):
         type: string
         required: true
         description: The operand
+        enum: ["ADD", "SUBTRACT", "MULTIPLY", "DIVIDE"]
       - name: id
         in: path
         type: integer
@@ -230,11 +231,11 @@ def apply_operand_to_stack(op, id):
         description: Stack not found
     """
     if id in stacks:
-        if op in OPERANDS:
+        operation = op.upper()
+        if operation in OPERANDS:
             stack = stacks[id]
-            operation = OPERANDS[op]
             try:
-                result = getattr(stack, operation)()
+                result = getattr(stack, operation.lower())()
             except ValueError as e:
                 abort(400, description=str(e))
             except ZeroDivisionError as e:
